@@ -1,177 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="application.TimerController">
+<BorderPane xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TimerController">
 
     <!-- TOP -->
-
     <top>
-
-        <HBox alignment="CENTER_LEFT" spacing="20">
-
+        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #FCBACB;">
             <padding>
-                <Insets top="15"
-                        right="15"
-                        bottom="15"
-                        left="15"/>
+                <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
-
-            <Label text="Focus Flow Timer">
-
+            <Label text="MeloFocus">
                 <font>
-                    <Font size="24"/>
+                    <Font name="System Bold" size="52.0" />
                 </font>
-
             </Label>
-
-            <Region HBox.hgrow="ALWAYS"/>
-
-            <Label fx:id="currentTimeLabel"
-                   text="00:00:00"/>
-
+            <Region HBox.hgrow="ALWAYS" />
+            <Separator orientation="VERTICAL" />
+            <Label fx:id="currentTimeLabel" prefHeight="50.0" prefWidth="136.0" text="00:00:00">
+                <font>
+                    <Font size="34.0" />
+                </font>
+            </Label>
         </HBox>
-
     </top>
 
     <!-- LEFT -->
-
     <left>
-
-        <VBox spacing="10">
-
+        <VBox prefWidth="280" spacing="15" style="-fx-background-color: #e1f6ff;">
             <padding>
-                <Insets top="15"
-                        right="15"
-                        bottom="15"
-                        left="15"/>
+                <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
-
             <Label text="Tasks">
-
                 <font>
-                    <Font size="18"/>
+                    <Font size="20" />
                 </font>
-
             </Label>
-
-            <TextField fx:id="taskField"
-                       promptText="Task name"/>
-
-            <TextField fx:id="rewardField"
-                       promptText="Reward minutes"/>
-
+            <TextField fx:id="taskField" promptText="Enter task"
+                       style="-fx-background-color: #ffffff;" />
+            <TextField fx:id="rewardField" promptText="Reward break minutes"
+                       style="-fx-background-color: #ffffff;" />
             <HBox spacing="10">
-
-                <Button text="Add"
-                        onAction="#addTask"/>
-
-                <Button text="Done"
-                        onAction="#completeTask"/>
-
-                <Button text="Delete"
-                        onAction="#deleteTask"/>
-
+                <Button onAction="#addTask" prefWidth="120"
+                        style="-fx-background-color: #72bf6a;" text="Add Task" textFill="#fffffffc">
+                    <font><Font name="Arial Bold" size="12.0" /></font>
+                </Button>
+                <Button onAction="#deleteTask" prefWidth="120"
+                        style="-fx-background-color: #72bf6a;" text="Delete" textFill="#f7f5f5">
+                    <font><Font name="Arial Bold" size="12.0" /></font>
+                </Button>
             </HBox>
-
-            <ListView fx:id="taskList"
-                      prefWidth="250"
-                      VBox.vgrow="ALWAYS"/>
-
+            <ListView fx:id="taskList" style="-fx-background-color: #b9ebff;"
+                      VBox.vgrow="ALWAYS" />
         </VBox>
-
     </left>
 
     <!-- CENTER -->
-
     <center>
+        <VBox alignment="CENTER" spacing="20" style="-fx-background-color: #FFFFED;">
 
-        <VBox alignment="CENTER"
-              spacing="20">
-
-            <Label fx:id="modeLabel"
-                   text="FOCUS MODE">
-
-                <font>
-                    <Font size="20"/>
-                </font>
-
+            <Label fx:id="modeLabel" text="FOCUS MODE">
+                <font><Font name="Arial Bold" size="20.0" /></font>
             </Label>
 
-            <Label fx:id="sessionLabel"
-                   text="Session #1">
-
+            <Label fx:id="timerLabel" prefHeight="64.0" prefWidth="171.0"
+                   text="25:00" textFill="#08bdff">
                 <font>
-                    <Font size="18"/>
+                    <Font size="72" />
                 </font>
-
             </Label>
 
-            <Label fx:id="timerLabel"
-                   text="25:00">
+            <ProgressBar fx:id="progressBar" prefWidth="320" progress="1" />
 
-                <font>
-                    <Font size="64"/>
-                </font>
-
-            </Label>
-
-            <ProgressBar fx:id="progressBar"
-                         prefWidth="300"/>
-
-            <HBox spacing="10"
-                   alignment="CENTER">
-
-                <Button text="Start"
-                        onAction="#startTimer"/>
-
-                <Button text="Pause"
-                        onAction="#pauseTimer"/>
-
-                <Button text="Reset"
-                        onAction="#resetTimer"/>
-
+            <HBox alignment="CENTER" spacing="15">
+                <Button onAction="#startTimer" prefWidth="100"
+                        style="-fx-background-color: #72bf6a;" text="Start" textFill="WHITE">
+                    <font><Font name="Arial Bold" size="12.0" /></font>
+                </Button>
+                <Button onAction="#pauseTimer" prefWidth="100"
+                        style="-fx-background-color: #72bf6a;" text="Pause" textFill="WHITE">
+                    <font><Font name="Arial Bold" size="12.0" /></font>
+                </Button>
+                <Button onAction="#resetTimer" prefWidth="100"
+                        style="-fx-background-color: #72bf6a;" text="Reset" textFill="WHITE">
+                    <font><Font name="Arial Bold" size="12.0" /></font>
+                </Button>
             </HBox>
 
-            <HBox spacing="25"
-                   alignment="CENTER">
-
-                <VBox alignment="CENTER"
-                       spacing="5">
-
-                    <Label text="Focus"/>
-
-                    <Spinner fx:id="studySpinner"/>
-
+            <HBox alignment="CENTER" spacing="30">
+                <VBox alignment="CENTER" spacing="8">
+                    <Label text="Focus" />
+                    <Spinner fx:id="studySpinner" prefWidth="100" />
                 </VBox>
-
-                <VBox alignment="CENTER"
-                       spacing="5">
-
-                    <Label text="Break"/>
-
-                    <Spinner fx:id="breakSpinner"/>
-
+                <VBox alignment="CENTER" spacing="8">
+                    <Label text="Break" />
+                    <Spinner fx:id="breakSpinner" prefWidth="100" />
                 </VBox>
-
             </HBox>
 
-            <Label fx:id="breakBankLabel"
-                   text="Break Bank: 0 min">
+            <VBox alignment="CENTER" spacing="10">
+                <Label fx:id="sessionLabel" prefHeight="30.0" prefWidth="298.0"
+                       text="Sessions Completed: 0">
+                    <font><Font size="20.0" /></font>
+                </Label>
+                <Label fx:id="breakBankLabel" prefHeight="30.0" prefWidth="299.0"
+                       text="Break Bank: 0 min">
+                    <font><Font size="20.0" /></font>
+                </Label>
+            </VBox>
 
-                <font>
-                    <Font size="18"/>
-                </font>
-
-            </Label>
+            <Button text="🏦 Redeem Break"
+                    onAction="#redeemBreak"
+                    prefWidth="180"
+                    style="-fx-background-color: #72bf6a; -fx-font-size: 14px; -fx-padding: 8 20 8 20;"
+                    textFill="WHITE">
+                <font><Font name="Arial Bold" size="13.0" /></font>
+            </Button>
 
         </VBox>
-
     </center>
 
 </BorderPane>

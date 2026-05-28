@@ -5,7 +5,14 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.time.LocalTime;
@@ -45,7 +52,6 @@ public class TimerController {
 
         taskList.setItems(FXCollections.observableArrayList());
 
-        // FIX 1: Checkbox now actually adds to break bank when clicked
         taskList.setCellFactory(param -> new ListCell<Task>() {
             @Override
             protected void updateItem(Task task, boolean empty) {
@@ -82,7 +88,10 @@ public class TimerController {
     private void startTimer() {
         if (timer != null) timer.stop();
 
-        int minutes = isBreak ? breakSpinner.getValue() : studySpinner.getValue();
+        int minutes = isBreak
+                ? breakSpinner.getValue()
+                : studySpinner.getValue();
+
         totalSeconds = minutes * 60;
         remainingSeconds = totalSeconds;
         progressBar.setProgress(1);
@@ -91,14 +100,15 @@ public class TimerController {
         timer = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             remainingSeconds--;
             updateTimerLabel();
-            progressBar.setProgress((double) remainingSeconds / totalSeconds);
+            progressBar.setProgress(
+                (double) remainingSeconds / totalSeconds
+            );
 
             if (remainingSeconds <= 0) {
                 timer.stop();
                 if (!isBreak) {
                     sessionCount++;
                     updateSessionLabel();
-                    // FIX 2: Show alert on FX thread
                     Platform.runLater(this::askBreakDecision);
                 } else {
                     isBreak = false;
@@ -129,13 +139,77 @@ public class TimerController {
             updateModeLabel();
             startTimer();
         } else {
-            // Skipped break → goes to Break Bank
             breakBank += breakSpinner.getValue();
             updateBreakBank();
             isBreak = false;
             updateModeLabel();
             startTimer();
         }
+    }
+
+    @FXML
+    private void redeemBreak() {
+        Stage redeemStage = new Stage();
+        redeemStage.setTitle("Redeem Break");
+        redeemStage.initModality(Modality.APPLICATION_MODAL);
+
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+        root.setAlignment(Pos.CENTER);
+
+        Label title = new Label("Redeem Break Time");
+        title.setStyle(
+            "-fx-font-size: 18px; -fx-font-weight: bold;"
+        );
+
+        Label bankInfo = new Label("Break Bank: " + breakBank + " min");
+        bankInfo.setStyle("-fx-font-size: 14px;");
+
+        Label prompt = new Label("How many minutes do you want?");
+
+        Spinner<Integer> minuteSpinner = new Spinner<>(1, 300, 5);
+        minuteSpinner.setEditable(true);
+        minuteSpinner.setPrefWidth(120);
+
+        Label statusLabel = new Label("");
+
+        Button confirmBtn = new Button("Start Break");
+        confirmBtn.setOnAction(e -> {
+            int requested = minuteSpinner.getValue();
+            breakBank -= requested;
+            updateBreakBank();
+
+            if (breakBank < 0) {
+                statusLabel.setText(
+                    "⚠ You're in debt by "
+                    + Math.abs(breakBank) + " min!"
+                );
+                statusLabel.setStyle(
+                    "-fx-text-fill: red; -fx-font-size: 13px;"
+                );
+            }
+
+            isBreak = true;
+            updateModeLabel();
+            breakSpinner.getValueFactory().setValue(requested);
+            startTimer();
+            redeemStage.close();
+        });
+
+        Button cancelBtn = new Button("Cancel");
+        cancelBtn.setOnAction(e -> redeemStage.close());
+
+        HBox buttons = new HBox(10, confirmBtn, cancelBtn);
+        buttons.setAlignment(Pos.CENTER);
+
+        root.getChildren().addAll(
+            title, bankInfo, prompt,
+            minuteSpinner, statusLabel, buttons
+        );
+
+        Scene scene = new Scene(root, 300, 260);
+        redeemStage.setScene(scene);
+        redeemStage.show();
     }
 
     @FXML
@@ -192,7 +266,17 @@ public class TimerController {
     }
 
     private void updateBreakBank() {
-        breakBankLabel.setText("Break Bank: " + breakBank + " min");
+        if (breakBank < 0) {
+            breakBankLabel.setText(
+                "Break Bank: " + breakBank + " min ⚠ (in debt)"
+            );
+            breakBankLabel.setStyle("-fx-text-fill: red;");
+        } else {
+            breakBankLabel.setText(
+                "Break Bank: " + breakBank + " min"
+            );
+            breakBankLabel.setStyle("-fx-text-fill: black;");
+        }
     }
 
     private void updateSessionLabel() {
@@ -204,9 +288,13 @@ public class TimerController {
     }
 
     private void startClock() {
-        clock = new Timeline(new KeyFrame(Duration.seconds(1), e ->
-            currentTimeLabel.setText(LocalTime.now().withNano(0).toString())
-        ));
+        clock = new Timeline(
+            new KeyFrame(Duration.seconds(1), e ->
+                currentTimeLabel.setText(
+                    LocalTime.now().withNano(0).toString()
+                )
+            )
+        );
         clock.setCycleCount(Timeline.INDEFINITE);
         clock.play();
     }
