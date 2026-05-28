@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="application.TimerController">
+
+    <!-- TOP -->
+    <top>
+
+        <HBox alignment="CENTER_LEFT" spacing="20">
+
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <Label text="Focus Flow">
+                <font>
+                    <Font size="26"/>
+                </font>
+            </Label>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="modeLabel"
+                   text="FOCUS MODE"/>
+
+            <Separator orientation="VERTICAL"/>
+
+            <Label fx:id="currentTimeLabel"
+                   text="00:00:00"/>
+
+        </HBox>
+
+    </top>
+
+    <!-- LEFT -->
+    <left>
+
+        <VBox spacing="15"
+              prefWidth="280">
+
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <Label text="Tasks">
+                <font>
+                    <Font size="20"/>
+                </font>
+            </Label>
+
+            <TextField fx:id="taskField"
+                       promptText="Enter task"/>
+
+            <TextField fx:id="rewardField"
+                       promptText="Reward break minutes"/>
+
+            <HBox spacing="10">
+
+                <Button text="Add Task"
+                        prefWidth="120"
+                        onAction="#addTask"/>
+
+                <Button text="Delete"
+                        prefWidth="120"
+                        onAction="#deleteTask"/>
+
+            </HBox>
+
+            <ListView fx:id="taskList"
+                      VBox.vgrow="ALWAYS"/>
+
+        </VBox>
+
+    </left>
+
+    <!-- CENTER -->
+    <center>
+
+        <VBox alignment="CENTER"
+              spacing="20">
+
+            <Label fx:id="timerLabel"
+                   text="25:00">
+
+                <font>
+                    <Font size="72"/>
+                </font>
+
+            </Label>
+
+            <ProgressBar fx:id="progressBar"
+                         prefWidth="320"
+                         progress="1"/>
+
+            <HBox alignment="CENTER"
+                  spacing="15">
+
+                <Button text="Start"
+                        prefWidth="100"
+                        onAction="#startTimer"/>
+
+                <Button text="Pause"
+                        prefWidth="100"
+                        onAction="#pauseTimer"/>
+
+                <Button text="Reset"
+                        prefWidth="100"
+                        onAction="#resetTimer"/>
+
+            </HBox>
+
+            <HBox alignment="CENTER"
+                  spacing="30">
+
+                <VBox alignment="CENTER"
+                      spacing="8">
+
+                    <Label text="Focus"/>
+
+                    <Spinner fx:id="studySpinner"
+                             prefWidth="100"/>
+
+                </VBox>
+
+                <VBox alignment="CENTER"
+                      spacing="8">
+
+                    <Label text="Break"/>
+
+                    <Spinner fx:id="breakSpinner"
+                             prefWidth="100"/>
+
+                </VBox>
+
+            </HBox>
+
+            <VBox alignment="CENTER"
+                  spacing="10">
+
+                <Label fx:id="sessionLabel"
+                       text="Sessions Completed: 0"/>
+
+                <Label fx:id="breakBankLabel"
+                       text="Break Bank: 0 min"/>
+
+            </VBox>
+
+        </VBox>
+
+    </center>
+
+</BorderPane>
